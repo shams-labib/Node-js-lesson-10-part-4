@@ -173,8 +173,9 @@ handler._token.put = (requestProperties, callback) => {
 //   "extend":true
 // }" id ta must tokens folder er moddo theke create kora token theke nite hobe, and then eta korle seit token tar 1 hour expire barbe boobie!
 
-
+// step-30 : so delete er jonno amader ager userHandler er delete ta niye ashbo, then setake modify korbo
 handler._token.delete = (requestProperties, callback) => {
+  // step-31 : ekhane phone bodole id hobe, length = 20
   // check the token if valid
   const id =
     typeof requestProperties.queryStringObject.id === "string" &&
@@ -184,6 +185,7 @@ handler._token.delete = (requestProperties, callback) => {
 
   if (id) {
     // lookup the user
+    // step-32 : and then ekhane user er bodole tokenData and user bodole oopure id:
     data.read("tokens", id, (err1, tokenData) => {
       if (!err1 && tokenData) {
         data.delete("tokens", id, (err2) => {
@@ -210,9 +212,17 @@ handler._token.delete = (requestProperties, callback) => {
   }
 };
 
+// step-33 : and then etar kaj sesh, ekhon amra eta delete korbo evabe : localHost:http://localhost:3000/token?id=okhrfp28krccvtop9wua, {
+//   "id": "okhrfp28krccvtop9wua",
+//   "extend":true
+// }, and then niche successfully fucked dekhabe and id delete hoye jabe candu, and evabe user logout hoy!
+
+// step-35 : ekhon amara varify function ta create korbo:
 handler._token.verify = (id, phone, callback) => {
+  // step-36 : and ekhane data tokens folder er modde data ta read korbo
   data.read("tokens", id, (err, tokenData) => {
     if (!err && tokenData) {
+      // step-37 : ekhane data ta parseJSON e convert kore nibo, c's data ta string
       if (
         parseJSON(tokenData).phone === phone &&
         parseJSON(tokenData).expires > Date.now()
@@ -224,7 +234,10 @@ handler._token.verify = (id, phone, callback) => {
     } else {
       callback(false);
     }
+    // step-38 : and etai silo simple verify function and just id and phone pathay diye ekhane ekta user ke authenticad korbo amra
   });
 };
 
 module.exports = handler;
+
+// step-34 : ekhon amader main kaj suru hobe, eta onkta amader express er middlewere er moto and ekhon amra userHandler er modde age just get,put,delete,post er kaj korchilam authentication chara, ekhon amra tokeverify er maddome pura kaj ta korbo, let's go!
